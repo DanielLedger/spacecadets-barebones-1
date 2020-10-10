@@ -107,7 +107,7 @@ public class Interpreter {
 				vars.put(var, vars.getOrDefault(var, 0) - 1); //Decrements a variable
 			}
 			else {
-				throw new InvalidInstructionException();
+				throw new InvalidInstructionException(ci, pointer);
 			}
 			//Do two things here
 			//1) Add 1 to the pointer.
@@ -128,5 +128,17 @@ class InvalidInstructionException extends Throwable{
 	 * Eclipse asked me to.
 	 */
 	private static final long serialVersionUID = -1674109805049593132L;
+	
+	private String line;
+	private int lineNumber;
+	
+	public InvalidInstructionException(String ci, int pointer) {
+		line = ci;
+		lineNumber = pointer + 1; 
+	}
+
+	public void printFailedLine() {
+		System.out.println("The following instruction on line " + lineNumber + " failed to parse! Instruction: " + line);
+	}
 	
 }
