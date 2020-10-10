@@ -9,8 +9,23 @@ public class Main {
 		//For now, all files are text, interpreted script files. THIS WILL PROBABLY CHANGE.
 		try {
 			File program = new File(args[0]);
+			boolean hasVFlag = false; boolean hasTFlag = false;
+			for (String s: args) {
+				if (s.contentEquals("-v")) {
+					hasVFlag = true;
+				}
+				else if (s.contentEquals("-t")) {
+					hasTFlag = true;
+				}
+			}
 			Interpreter programRunner = new Interpreter(program);
-			programRunner.execute(true);
+			if (!hasTFlag) {
+				programRunner.execute(!hasVFlag);
+			}
+			else {
+				long timeTaken = programRunner.executeTimed(!hasVFlag);
+				System.out.println("Execution completed in " + timeTaken + " ms.");
+			}
 		}
 		catch (InvalidInstructionException e) {
 			e.printFailedLine();
@@ -19,7 +34,7 @@ public class Main {
 			System.out.println("Invalid filename specified!");
 		}
 		catch (ArrayIndexOutOfBoundsException e) {
-			System.out.println("Usage: java -jar Challenge-2.jar <filename>");
+			System.out.println("Usage: java -jar Challenge-2.jar <filename> [options]");
 		}
 		
 	}

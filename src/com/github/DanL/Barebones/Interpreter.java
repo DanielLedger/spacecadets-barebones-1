@@ -2,6 +2,7 @@ package com.github.DanL.Barebones;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -119,6 +120,18 @@ public class Interpreter {
 		}
 		//Program end.
 		printTrace();
+	}
+	
+	/**
+	 * Times the program's execution.
+	 * @param debugOutput - Should we print variable values at every step, or just at the end?
+	 * @return - The time in milliseconds to run the program.
+	 * @throws InvalidInstructionException - if an instruction couldn't be parsed.
+	 */
+	public long executeTimed(boolean debugOutput) throws InvalidInstructionException {
+		long timeNow = Instant.now().toEpochMilli();
+		execute(debugOutput);
+		return Instant.now().toEpochMilli() - timeNow;
 	}
 }
 
