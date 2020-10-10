@@ -25,3 +25,10 @@ I may also include a compiler and bytecode runner, if I have time.
 
 Running the program:
 java -jar Challenge-2.jar filename 
+
+
+Important notes:
+The interpreter is fairly forgiving: if a variable doen't exist, it is assumed to equal zero.
+Command line switches:
+-v = Turns the extra printing OFF (this will only print at the end).
+-t = Time the execution of a script.
