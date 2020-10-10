@@ -24,5 +24,4 @@ This project is an interpreter for this very simple language.
 I may also include a compiler and bytecode runner, if I have time.
 
 Running the program:
-java -jar Challenge-2.jar <file name>
- 
+java -jar Challenge-2.jar filename 
