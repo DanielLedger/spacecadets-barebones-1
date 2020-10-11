@@ -23,9 +23,6 @@ public class CompiledExec {
 		FileInputStream in = new FileInputStream(f);
 		byte[] metadata = new byte[10];
 		in.read(metadata);
-		for (byte b: metadata) {
-			System.out.println(b);
-		}
 		//We're assuming we haven't been tricked into attempting to run something dumb like a zip file, so we won't check.
 		//Bonus points for doing that and seeing what the mess of the output is (probably an ArrayIndexOutOfBoundsException).
 		short memLen = (short) ((metadata[4] << 8) + metadata[5]);
@@ -33,6 +30,10 @@ public class CompiledExec {
 		for (byte i = 6; i < 10; i++) {
 			progLen = progLen << 8;
 			progLen += metadata[i];
+			if (metadata[i] < 0) {
+				progLen += 256;
+			}
+			
 		}
 		System.out.println("Memory length: " + memLen);
 		System.out.println("Program length: " + progLen);
@@ -59,7 +60,7 @@ public class CompiledExec {
 		int pc = 0;
 		while (pc < prog.length) {
 			byte instruction = prog[pc];
-			int varPointer = prog[pc+1] << 8 + prog[pc + 2]; //It's fine, it'll work the same way even though it should be a short.
+			int varPointer = prog[pc+1] & 0xff << 8 + prog[pc + 2] & 0xff; //It's fine, it'll work the same way even though it should be a short.
 			//System.out.println(instruction);
 			if (instruction == INCR) {
 				//Instruction is INC
@@ -80,11 +81,11 @@ public class CompiledExec {
 					int newPointer = 0;
 					for (int i = pc + 3; i < pc + 7; i++) {
 						newPointer = newPointer << 8;
-						newPointer += prog[i];
+						newPointer += (prog[i] & 0xff);
 					}
 					//System.out.println(newPointer);
 					pc = newPointer;
-					//pc -= 7; //We're about to add 7, so we need to ensure the pointer lands in the right place.
+					pc -= 7; //We're about to add 7, so we need to ensure the pointer lands in the right place.
 				}
 			}
 			else {

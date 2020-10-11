@@ -142,15 +142,17 @@ public class Compiler {
 			else if (inst.contentEquals("while")) {
 				//The while instruction is parsed slightly weirdly: we remove it, but add a pointer
 				//in whileLoopPointers, for the end instruction to come back to.
-				long pointer = length + (varID[0] << 40) + (varID[1] << 32);
+				long pointer = length + ((varID[0] & 0xff) << 40) + ((varID[1] & 0xff) << 32);
 				whileLoopPointers.add(pointer);
-				//length -= 7; //It's about to have 7 added, so remove 7 from it to keep it consistent. (maybe)
+				//length += 7;
+				continue; //Don't write anything to the byte stream.
 			}
 			else if (inst.contentEquals("end")) {
 				//The strangest and most frustrating instruction:
 				//1) Retrieve the most recent pointer and extract the target and variable ID from it.
 				//2) Construct a GOTO instruction based on that.
 				long lastPointer = whileLoopPointers.get(whileLoopPointers.size() - 1);
+				whileLoopPointers.remove(lastPointer);
 				varID[0] = (byte) ((lastPointer >> 40) & 0xff);
 				varID[1] = (byte) ((lastPointer >> 32) & 0xff);
 				byte[] target = numToBytes((int) (lastPointer & 0xffffffff));
@@ -161,6 +163,10 @@ public class Compiler {
 				}
 			}
 			length += 7;
+			System.out.println("Writing the following bytes due to the token " + line);
+			for (byte b: currentInstruction) {
+				System.out.println(b);
+			}
 			rawCode.write(currentInstruction);
 		}
 		ByteArrayOutputStream returnStream = new ByteArrayOutputStream();
