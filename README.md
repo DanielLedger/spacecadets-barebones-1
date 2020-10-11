@@ -8,10 +8,10 @@ Set a variable to zero.
 clear var;
 
 Add one to a variable.
-inc var;
+incr var;
   
 Subtract one from a variable.
-dec var;
+decr var;
   
 Loop until var is 0.
 while var not 0 do;
