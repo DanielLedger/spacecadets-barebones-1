@@ -25,7 +25,7 @@ public class Compiler {
 			return false;
 		}
 		for (byte i = 0;i<4;i++) {
-			if (i != header[i]) {
+			if (head[i] != header[i]) {
 				return false;
 			}
 		}

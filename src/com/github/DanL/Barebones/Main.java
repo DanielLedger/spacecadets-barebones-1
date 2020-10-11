@@ -15,7 +15,6 @@ public class Main {
 	}
 	
 	public static void main(String[] args) throws InvalidInstructionException {
-		//For now, all files are text, interpreted script files. THIS WILL PROBABLY CHANGE.
 		try {
 			File program = new File(args[0]);
 			boolean hasVFlag = false; boolean hasTFlag = false;
@@ -37,7 +36,14 @@ public class Main {
 			if (m == Mode.RUN) {
 				//We need to detect if this file need the text interpreter or bytecode interpreter.
 				if (Compiler.isCompiledCode(program)) {
-					
+					CompiledExec programRunner = new CompiledExec(program);
+					if (!hasTFlag) {
+						programRunner.execute(!hasVFlag);
+					}
+					else {
+						long timeTaken = programRunner.executeTimed(!hasVFlag);
+						System.out.println("Execution completed in " + timeTaken + " ms.");
+					}
 				}
 				else {
 					Interpreter programRunner = new Interpreter(program);
