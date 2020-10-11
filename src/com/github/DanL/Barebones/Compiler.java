@@ -142,7 +142,7 @@ public class Compiler {
 			else if (inst.contentEquals("while")) {
 				//The while instruction is parsed slightly weirdly: we remove it, but add a pointer
 				//in whileLoopPointers, for the end instruction to come back to.
-				long pointer = length + 10 + (varID[0] << 40) + (varID[1] << 32);
+				long pointer = length + (varID[0] << 40) + (varID[1] << 32);
 				whileLoopPointers.add(pointer);
 				//length -= 7; //It's about to have 7 added, so remove 7 from it to keep it consistent. (maybe)
 			}

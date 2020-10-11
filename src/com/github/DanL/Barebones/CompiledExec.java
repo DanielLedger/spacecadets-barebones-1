@@ -60,7 +60,7 @@ public class CompiledExec {
 		while (pc < prog.length) {
 			byte instruction = prog[pc];
 			int varPointer = prog[pc+1] << 8 + prog[pc + 2]; //It's fine, it'll work the same way even though it should be a short.
-			System.out.println(instruction);
+			//System.out.println(instruction);
 			if (instruction == INCR) {
 				//Instruction is INC
 				mem[varPointer] = mem[varPointer] + 1;
@@ -75,16 +75,16 @@ public class CompiledExec {
 			}
 			else if (instruction == GOTO) {
 				//GOTO IF NOT ZERO
-				System.out.println("GOTO");
+				//System.out.println("GOTO");
 				if (mem[varPointer] != 0) {
 					int newPointer = 0;
 					for (int i = pc + 3; i < pc + 7; i++) {
 						newPointer = newPointer << 8;
 						newPointer += prog[i];
 					}
-					System.out.println(newPointer);
+					//System.out.println(newPointer);
 					pc = newPointer;
-					pc -= 7; //We're about to add 7, so we need to ensure the pointer lands in the right place.
+					//pc -= 7; //We're about to add 7, so we need to ensure the pointer lands in the right place.
 				}
 			}
 			else {
