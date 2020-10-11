@@ -144,7 +144,7 @@ public class Compiler {
 				//in whileLoopPointers, for the end instruction to come back to.
 				long pointer = length + 10 + (varID[0] << 40) + (varID[1] << 32);
 				whileLoopPointers.add(pointer);
-				length -= 7; //It's about to have 7 added, so remove 7 from it to keep it consistent.
+				//length -= 7; //It's about to have 7 added, so remove 7 from it to keep it consistent. (maybe)
 			}
 			else if (inst.contentEquals("end")) {
 				//The strangest and most frustrating instruction:
