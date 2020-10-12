@@ -56,7 +56,7 @@ public class CompiledExec {
 	 * @param printMem - Should we output the contents of our memory after every run, or at the end?
 	 * @throws InvalidInstructionException 
 	 */
-	public void execute(boolean printMem) throws InvalidInstructionException {
+	public void executeVerbose() throws InvalidInstructionException {
 		int pc = 0;
 		while (pc < prog.length) {
 			byte instruction = prog[pc];
@@ -96,13 +96,60 @@ public class CompiledExec {
 			}
 			System.out.println(pc);
 			pc += 7;
-			if (printMem) {
-				printMem();
-			}
+			printMem();
 			
 		}
 		System.out.println("END");
 		printMem();
+	}
+	
+	public void executeSilent() throws InvalidInstructionException {
+		int pc = 0;
+		while (pc < prog.length) {
+			byte instruction = prog[pc];
+			int varPointer = (prog[pc+1] & 0xff << 8) + (prog[pc + 2] & 0xff); //It's fine, it'll work the same way even though it should be a short.
+			//System.out.println(instruction);
+			if (instruction == INCR) {
+				//Instruction is INC
+				mem[varPointer] = mem[varPointer] + 1;
+			}
+			else if (instruction == DECR) {
+				//Instruction is DEC
+				mem[varPointer] = mem[varPointer] - 1;
+			}
+			else if (instruction == CLEAR) {
+				//CLEAR
+				mem[varPointer] = 0;
+			}
+			else if (instruction == GOTO) {
+				//GOTO IF NOT ZERO
+				if (mem[varPointer] != 0) {
+					int newPointer = 0;
+					for (int i = pc + 3; i < pc + 7; i++) {
+						newPointer = newPointer << 8;
+						newPointer += (prog[i] & 0xff);
+					}
+					//System.out.println(newPointer);
+					pc = newPointer;
+					pc -= 7; //We're about to add 7, so we need to ensure the pointer lands in the right place.
+				}
+			}
+			else {
+				throw new InvalidInstructionException(String.valueOf(instruction), pc);
+			}
+			pc += 7;
+		}
+		System.out.println("END");
+		printMem();
+	}
+	
+	public void execute(boolean runDebug) throws InvalidInstructionException {
+		if (runDebug) {
+			executeVerbose();
+		}
+		else {
+			executeSilent();
+		}
 	}
 	
 	/**
