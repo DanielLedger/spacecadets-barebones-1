@@ -32,3 +32,6 @@ The interpreter is fairly forgiving: if a variable doen't exist, it is assumed t
 Command line switches:
 `-v` = Turns the extra printing OFF (this will only print at the end).
 `-t` = Time the execution of a script.
+
+
+Some kind of conflict O.O
