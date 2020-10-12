@@ -21,7 +21,7 @@ end`
   
 This project is an interpreter for this very simple language.
 
-I may also include a compiler and bytecode runner, if I have time.
+There is also a compiler built in (see the `-c` flag) and bytecode executor (the program automatically figures out which one to use).
 
 Running the program:
 `java -jar Challenge-2.jar filename` 
@@ -32,3 +32,4 @@ The interpreter is fairly forgiving: if a variable doen't exist, it is assumed t
 Command line switches:
 `-v` = Turns the extra printing OFF (this will only print at the end).
 `-t` = Time the execution of a script.
+`-c` = Compile the input file into bytecode
