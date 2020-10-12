@@ -146,9 +146,11 @@ public class Compiler {
 				//in whileLoopPointers, for the end instruction to come back to.
 				long varId0 = varID[0];
 				long varId1 = varID[1];
-				System.out.println("VarID: " + (varId0 << 40) + "," + ((varId1 & 0xff) << 32));
 				long pointer = length + ((varId0 & 0xff) << 40) + ((varId1 & 0xff) << 32);
-				System.out.println(pointer);
+				if (verbose) {
+					System.out.println("VarID: " + (varId0 << 40) + "," + ((varId1 & 0xff) << 32));
+					System.out.println(pointer);
+				}
 				whileLoopPointers.add(pointer);
 				//length += 7;
 				continue; //Don't write anything to the byte stream.
