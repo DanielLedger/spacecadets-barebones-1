@@ -66,7 +66,7 @@ public class Interpreter {
 		String var;
 		String[] split;
 		while (pointer < maxPointer) {
-			ci = tokens[pointer].trim();
+			ci = tokens[pointer].trim().toLowerCase();
 			if (printTraceSteps) {
 				System.out.println(ci);
 			}

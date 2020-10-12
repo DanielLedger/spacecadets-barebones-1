@@ -112,7 +112,7 @@ public class Compiler {
 		byte[] currentInstruction;
 		for (String line: tokens) {
 			currentInstruction = new byte[7];
-			String[] parts = line.trim().split(" ");
+			String[] parts = line.trim().toLowerCase().split(" ");
 			String inst = parts[0];
 			byte[] varID = new byte[2];
 			if (parts.length > 1) {
