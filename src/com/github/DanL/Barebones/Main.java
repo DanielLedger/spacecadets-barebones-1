@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.Instant;
 
 public class Main {
 
@@ -33,27 +34,16 @@ public class Main {
 					m = Mode.JIT;
 				}
 			}
+			long timeNow = Instant.now().toEpochMilli();
 			if (m == Mode.RUN) {
 				//We need to detect if this file need the text interpreter or bytecode interpreter.
 				if (Compiler.isCompiledCode(program)) {
 					CompiledExec programRunner = new CompiledExec(program);
-					if (!hasTFlag) {
-						programRunner.execute(!hasVFlag);
-					}
-					else {
-						long timeTaken = programRunner.executeTimed(!hasVFlag);
-						System.out.println("Execution completed in " + timeTaken + " ms.");
-					}
+					programRunner.execute(!hasVFlag);
 				}
 				else {
 					Interpreter programRunner = new Interpreter(program);
-					if (!hasTFlag) {
-						programRunner.execute(!hasVFlag);
-					}
-					else {
-						long timeTaken = programRunner.executeTimed(!hasVFlag);
-						System.out.println("Execution completed in " + timeTaken + " ms.");
-					}
+					programRunner.execute(!hasVFlag);
 				}
 			}
 			else if (m == Mode.COMPILE) {
@@ -68,13 +58,11 @@ public class Main {
 				Compiler comp = new Compiler(program);
 				ByteArrayOutputStream bytecode = comp.compile(!hasVFlag);
 				CompiledExec programRunner = new CompiledExec(bytecode.toByteArray());
-				if (!hasTFlag) {
-					programRunner.execute(!hasVFlag);
-				}
-				else {
-					long timeTaken = programRunner.executeTimed(!hasVFlag);
-					System.out.println("Execution completed in " + timeTaken + " ms.");
-				}
+				programRunner.execute(!hasVFlag);
+			}
+			if (hasTFlag) {
+				long deltaT = Instant.now().toEpochMilli() - timeNow;
+				System.out.println("Operation complete in " + deltaT + " ms.");
 			}
 		}
 		catch (InvalidInstructionException e) {
