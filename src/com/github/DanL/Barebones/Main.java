@@ -58,7 +58,7 @@ public class Main {
 			}
 			else if (m == Mode.COMPILE) {
 				Compiler comp = new Compiler(program);
-				ByteArrayOutputStream bytecode = comp.compile();
+				ByteArrayOutputStream bytecode = comp.compile(!hasVFlag);
 				File byteCodeOut = new File(args[0] + ".comp");
 				FileOutputStream writer = new FileOutputStream(byteCodeOut);
 				writer.write(bytecode.toByteArray());

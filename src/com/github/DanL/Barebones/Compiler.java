@@ -77,6 +77,7 @@ public class Compiler {
 	
 	private static final byte[] header = {0x42, 0x4f, 0x4e, 0x45}; 
 	
+	
 	/**
 	 * Creates a compiled binary stream: this stream can be shoved into a file or run directly.
 	 * 
@@ -103,7 +104,7 @@ public class Compiler {
 	 * @return The tokens we were given, compiled into bytes.
 	 * @throws IOException 
 	 */
-	public ByteArrayOutputStream compile() throws IOException {
+	public ByteArrayOutputStream compile(boolean verbose) throws IOException {
 		ByteArrayOutputStream rawCode = new ByteArrayOutputStream();
 		int length = 0;
 		ArrayList<String> definedVars = new ArrayList<String>();
@@ -158,8 +159,10 @@ public class Compiler {
 				//2) Construct a GOTO instruction based on that.
 				long lastPointer = whileLoopPointers.get(whileLoopPointers.size() - 1);
 				whileLoopPointers.remove(lastPointer);
-				System.out.println("-----------");
-				System.out.println(lastPointer);
+				if (verbose) {
+					System.out.println("-----------");
+					System.out.println(lastPointer);
+				}
 				varID[0] = (byte) ((lastPointer >> 40) & 0xff);
 				varID[1] = (byte) ((lastPointer >> 32) & 0xff);
 				byte[] target = numToBytes((int) (lastPointer & 0xffffffff)); //Update: it was not required. I can't do hex apparently.
@@ -170,9 +173,11 @@ public class Compiler {
 				}
 			}
 			length += 7;
-			System.out.println("Writing the following bytes due to the token " + line);
-			for (byte b: currentInstruction) {
-				System.out.println(b);
+			if (verbose) {
+				System.out.println("Writing the following bytes due to the token " + line);
+				for (byte b: currentInstruction) {
+					System.out.println(b);
+				}
 			}
 			rawCode.write(currentInstruction);
 		}
