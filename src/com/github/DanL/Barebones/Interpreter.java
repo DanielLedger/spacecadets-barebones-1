@@ -67,7 +67,7 @@ public class Interpreter {
 		String[] split;
 		while (pointer < maxPointer) {
 			ci = tokens[pointer].trim();
-			//System.out.println(ci);
+			System.out.println(ci);
 			split = ci.split(" ");
 			inst = split[0];
 			if (inst.contentEquals("end")) {

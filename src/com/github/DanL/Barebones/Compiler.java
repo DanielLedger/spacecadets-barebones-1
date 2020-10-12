@@ -108,8 +108,9 @@ public class Compiler {
 		int length = 0;
 		ArrayList<String> definedVars = new ArrayList<String>();
 		ArrayList<Long> whileLoopPointers = new ArrayList<Long>();
-		byte[] currentInstruction = new byte[7];
+		byte[] currentInstruction;
 		for (String line: tokens) {
+			currentInstruction = new byte[7];
 			String[] parts = line.trim().split(" ");
 			String inst = parts[0];
 			byte[] varID = new byte[2];
@@ -142,7 +143,11 @@ public class Compiler {
 			else if (inst.contentEquals("while")) {
 				//The while instruction is parsed slightly weirdly: we remove it, but add a pointer
 				//in whileLoopPointers, for the end instruction to come back to.
-				long pointer = length + ((varID[0] & 0xff) << 40) + ((varID[1] & 0xff) << 32);
+				long varId0 = varID[0];
+				long varId1 = varID[1];
+				System.out.println("VarID: " + (varId0 << 40) + "," + ((varId1 & 0xff) << 32));
+				long pointer = length + ((varId0 & 0xff) << 40) + ((varId1 & 0xff) << 32);
+				System.out.println(pointer);
 				whileLoopPointers.add(pointer);
 				//length += 7;
 				continue; //Don't write anything to the byte stream.
@@ -153,9 +158,11 @@ public class Compiler {
 				//2) Construct a GOTO instruction based on that.
 				long lastPointer = whileLoopPointers.get(whileLoopPointers.size() - 1);
 				whileLoopPointers.remove(lastPointer);
+				System.out.println("-----------");
+				System.out.println(lastPointer);
 				varID[0] = (byte) ((lastPointer >> 40) & 0xff);
 				varID[1] = (byte) ((lastPointer >> 32) & 0xff);
-				byte[] target = numToBytes((int) (lastPointer & 0xffffffff));
+				byte[] target = numToBytes((int) (lastPointer & 0xffffffff)); //Update: it was not required. I can't do hex apparently.
 				currentInstruction[0] = (byte) 0xb0;
 				currentInstruction[1] = varID[0]; currentInstruction[2] = varID[1];
 				for (byte i = 0; i < 4; i++) {
