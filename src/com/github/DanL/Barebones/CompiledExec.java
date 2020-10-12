@@ -1,5 +1,6 @@
 package com.github.DanL.Barebones;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -21,6 +22,30 @@ public class CompiledExec {
 	 */
 	public CompiledExec(File f) throws IOException {
 		FileInputStream in = new FileInputStream(f);
+		byte[] metadata = new byte[10];
+		in.read(metadata);
+		//We're assuming we haven't been tricked into attempting to run something dumb like a zip file, so we won't check.
+		//Bonus points for doing that and seeing what the mess of the output is (probably an ArrayIndexOutOfBoundsException).
+		short memLen = (short) ((metadata[4] << 8) + metadata[5]);
+		int progLen = 0;
+		for (byte i = 6; i < 10; i++) {
+			progLen = progLen << 8;
+			progLen += metadata[i];
+			if (metadata[i] < 0) {
+				progLen += 256;
+			}
+			
+		}
+		System.out.println("Memory length: " + memLen);
+		System.out.println("Program length: " + progLen);
+		mem = new int[memLen];
+		prog = new byte[progLen];
+		in.read(prog);
+		in.close();
+	}
+	
+	public CompiledExec(byte[] byteCode) throws IOException {
+		ByteArrayInputStream in = new ByteArrayInputStream(byteCode);
 		byte[] metadata = new byte[10];
 		in.read(metadata);
 		//We're assuming we haven't been tricked into attempting to run something dumb like a zip file, so we won't check.

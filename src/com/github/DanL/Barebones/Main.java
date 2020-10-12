@@ -64,6 +64,18 @@ public class Main {
 				writer.write(bytecode.toByteArray());
 				writer.close();
 			}
+			else if (m == Mode.JIT) {
+				Compiler comp = new Compiler(program);
+				ByteArrayOutputStream bytecode = comp.compile(!hasVFlag);
+				CompiledExec programRunner = new CompiledExec(bytecode.toByteArray());
+				if (!hasTFlag) {
+					programRunner.execute(!hasVFlag);
+				}
+				else {
+					long timeTaken = programRunner.executeTimed(!hasVFlag);
+					System.out.println("Execution completed in " + timeTaken + " ms.");
+				}
+			}
 		}
 		catch (InvalidInstructionException e) {
 			e.printFailedLine();
