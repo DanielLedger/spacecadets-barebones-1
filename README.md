@@ -29,6 +29,7 @@ Running the program:
 
 Important notes:
 The interpreter is fairly forgiving: if a variable doen't exist, it is assumed to equal zero.
+
 Command line switches:
 `-v` = Turns the extra printing OFF (this will only print at the end).
 `-t` = Time the execution of a script.
